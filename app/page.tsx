@@ -9,7 +9,7 @@ import {
   Rocket,
   ArrowRight,
 } from "lucide-react";
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
+import { APP_NAME, APP_TAGLINE, APP_VERSION } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 
 const sections = [
@@ -108,6 +108,8 @@ export default function HomePage() {
           >
             Takes about 5 minutes. Your answers are saved automatically.
           </motion.p>
+
+          <p className="text-[10px] text-zinc-300 font-mono">v{APP_VERSION}</p>
         </div>
       </div>
     </div>
