@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Edit3, Download } from "lucide-react";
+import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle } from "lucide-react";
 import { usePlanStore } from "@/store/plan-store";
 import { steps } from "@/config/steps";
 import { SECTION_META, type Section } from "@/types";
@@ -20,7 +20,18 @@ const sectionOrder: Section[] = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { answers, completed } = usePlanStore();
+  const { answers, completed, reset } = usePlanStore();
+
+  const handleReset = async () => {
+    if (!window.confirm("Clear all answers and start over? This cannot be undone.")) return;
+    try {
+      await fetch("/api/plan/reset", { method: "POST" });
+    } catch {
+      // DB reset failed — still clear local
+    }
+    reset();
+    router.push("/");
+  };
 
   useEffect(() => {
     if (!completed && Object.keys(answers).length === 0) {
@@ -73,10 +84,27 @@ export default function DashboardPage() {
             </Link>
             <h1 className="text-xl font-semibold text-zinc-900">{APP_NAME}</h1>
           </div>
-          <Button variant="outline" size="sm" disabled className="gap-2">
-            <Download className="w-4 h-4" />
-            Export PDF
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link href="/admin">
+              <Button variant="outline" size="sm" className="gap-2">
+                <MessageCircle className="w-4 h-4" />
+                Feedback
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleReset}
+              className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-50"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Reset
+            </Button>
+            <Button variant="outline" size="sm" disabled className="gap-2">
+              <Download className="w-4 h-4" />
+              Export PDF
+            </Button>
+          </div>
         </div>
       </div>
 

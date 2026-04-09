@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { steps } from "@/config/steps";
 import { usePlanStore } from "@/store/plan-store";
 import { StepRenderer } from "@/components/flow/step-renderer";
+import { StepFeedback } from "@/components/flow/step-feedback";
 import { ProgressBar } from "@/components/flow/progress-bar";
 import { useKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { SECTION_META } from "@/types";
@@ -109,6 +110,9 @@ export default function FlowPage() {
                 value={value}
                 onChange={(val) => setAnswer(step.id, val)}
               />
+
+              {/* Feedback */}
+              {!isIntro && <StepFeedback stepId={step.id} />}
             </motion.div>
           </AnimatePresence>
         </div>
