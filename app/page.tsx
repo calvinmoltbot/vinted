@@ -116,7 +116,20 @@ export default function HomePage() {
             Takes about 5 minutes. Your answers are saved automatically.
           </motion.p>
 
-          <p className="text-[10px] text-zinc-300 font-mono">v{APP_VERSION}</p>
+          <div className="flex items-center gap-3">
+            <p className="text-[10px] text-zinc-300 font-mono">v{APP_VERSION}</p>
+            <button
+              onClick={async () => {
+                if (!window.confirm("Clear all data and start fresh?")) return;
+                try { await fetch("/api/plan/reset", { method: "POST" }); } catch {}
+                localStorage.removeItem("relist-plan");
+                window.location.reload();
+              }}
+              className="text-[10px] text-zinc-300 hover:text-red-400 font-mono transition-colors"
+            >
+              reset
+            </button>
+          </div>
         </div>
       </div>
     </div>
