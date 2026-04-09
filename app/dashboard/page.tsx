@@ -17,6 +17,7 @@ const sectionOrder: Section[] = [
   "goals-financials",
   "operations",
   "growth-brand",
+  "app-wishlist",
 ];
 
 export default function DashboardPage() {
@@ -82,6 +83,7 @@ export default function DashboardPage() {
     amber: "border-amber-200 bg-amber-50/50",
     sky: "border-sky-200 bg-sky-50/50",
     violet: "border-violet-200 bg-violet-50/50",
+    emerald: "border-emerald-200 bg-emerald-50/50",
   };
 
   const headerColorMap: Record<string, string> = {
@@ -89,6 +91,7 @@ export default function DashboardPage() {
     amber: "text-amber-600",
     sky: "text-sky-600",
     violet: "text-violet-600",
+    emerald: "text-emerald-600",
   };
 
   return (

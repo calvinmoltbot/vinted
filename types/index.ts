@@ -14,7 +14,8 @@ export type Section =
   | "core-business"
   | "goals-financials"
   | "operations"
-  | "growth-brand";
+  | "growth-brand"
+  | "app-wishlist";
 
 export interface StepOption {
   value: string;
@@ -79,5 +80,10 @@ export const SECTION_META: Record<
     label: "Growth & Brand",
     color: "violet",
     icon: "Rocket",
+  },
+  "app-wishlist": {
+    label: "Your Dream Tool",
+    color: "emerald",
+    icon: "Sparkles",
   },
 };

@@ -7,12 +7,14 @@ import {
   TrendingUp,
   Settings,
   Rocket,
+  Sparkles,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   ShoppingBag,
   TrendingUp,
   Settings,
+  Sparkles,
   Rocket,
 };
 
@@ -29,6 +31,7 @@ export function SectionIntro({ step }: SectionIntroProps) {
     amber: "from-amber-500 to-amber-600",
     sky: "from-sky-500 to-sky-600",
     violet: "from-violet-500 to-violet-600",
+    emerald: "from-emerald-500 to-emerald-600",
   };
 
   return (

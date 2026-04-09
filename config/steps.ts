@@ -278,6 +278,91 @@ export const steps: Step[] = [
       "e.g. Quit my day job, hit £3k/month, launch my own brand, open a market stall...",
     required: true,
   },
+  // ── Section 5: Your Dream Tool ──────────────────────────────────
+  {
+    id: "app_intro",
+    section: "app-wishlist",
+    type: "section-intro",
+    question: "One last thing — your dream tool",
+    subtitle:
+      "We're building an app to help you run your business. Tell us what YOU actually want it to do.",
+  },
+  {
+    id: "app_biggest_pain",
+    section: "app-wishlist",
+    type: "textarea",
+    question: "What's the most annoying part of running your Vinted business?",
+    subtitle:
+      "The thing that wastes your time, frustrates you, or makes you think 'there must be a better way'.",
+    placeholder:
+      "e.g. I can never remember what I paid for things, I lose track of what's listed, relisting takes forever...",
+    required: true,
+  },
+  {
+    id: "app_must_have",
+    section: "app-wishlist",
+    type: "multi-select",
+    question: "If this app could do ONE thing brilliantly, what should it be?",
+    subtitle: "Pick the features that matter most to you.",
+    options: [
+      { value: "inventory", label: "Track all my stock in one place" },
+      { value: "profit", label: "Show me exactly how much I'm making" },
+      { value: "deals", label: "Find underpriced items to buy and resell" },
+      { value: "analytics", label: "Tell me what's selling and what isn't" },
+      { value: "listing", label: "Make listing items faster" },
+      { value: "goals", label: "Help me hit my revenue targets" },
+    ],
+    required: true,
+  },
+  {
+    id: "app_daily_use",
+    section: "app-wishlist",
+    type: "select",
+    question: "How would you use this app day-to-day?",
+    subtitle: "Be honest — we want to build something you'll actually open.",
+    options: [
+      { value: "quick-log", label: "Quick 30-second check-ins to log sales" },
+      { value: "morning-routine", label: "Part of my morning routine — plan my day" },
+      { value: "end-of-day", label: "End of day review — see how I did" },
+      { value: "when-sourcing", label: "While I'm out sourcing — check prices and stock" },
+    ],
+    required: true,
+  },
+  {
+    id: "app_device",
+    section: "app-wishlist",
+    type: "select",
+    question: "Where would you mainly use it?",
+    subtitle: "This helps us design it for the right screen.",
+    options: [
+      { value: "phone", label: "My phone (mostly)" },
+      { value: "laptop", label: "My laptop / computer" },
+      { value: "both", label: "Both equally" },
+      { value: "tablet", label: "A tablet" },
+    ],
+    required: true,
+  },
+  {
+    id: "app_existing_tools",
+    section: "app-wishlist",
+    type: "textarea",
+    question: "Do you use any apps or tools to help with your Vinted business right now?",
+    subtitle:
+      "Even basic ones — Notes app, spreadsheets, calculators, other selling apps. We want to know what to replace or work alongside.",
+    placeholder:
+      "e.g. I use the Notes app to track what I've bought, a calculator for pricing, nothing else really...",
+  },
+  {
+    id: "app_dream_feature",
+    section: "app-wishlist",
+    type: "textarea",
+    question: "If you could wave a magic wand, what would this app do for you?",
+    subtitle:
+      "No limits — dream big. What would make running your Vinted business feel effortless?",
+    placeholder:
+      "e.g. Automatically tell me what to price things at, show me what to buy at car boots, track everything without me having to type anything...",
+    required: true,
+  },
 ];
 
 export const TOTAL_STEPS = steps.length;

@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Settings,
   Rocket,
+  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { APP_NAME, APP_TAGLINE, APP_VERSION } from "@/lib/constants";
@@ -36,6 +37,12 @@ const sections = [
     label: "Growth & Brand",
     desc: "Scaling & brand identity",
     color: "bg-violet-100 text-violet-600",
+  },
+  {
+    icon: Sparkles,
+    label: "Your Dream Tool",
+    desc: "What you want the app to do",
+    color: "bg-emerald-100 text-emerald-600",
   },
 ];
 
@@ -78,7 +85,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8"
+            className="grid grid-cols-2 md:grid-cols-5 gap-4 pt-8"
           >
             {sections.map((s) => (
               <div
