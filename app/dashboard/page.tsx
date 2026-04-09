@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle } from "lucide-react";
 import { usePlanStore } from "@/store/plan-store";
-import { steps } from "@/config/steps";
+import { useSteps } from "@/hooks/use-steps";
 import { SECTION_META, type Section } from "@/types";
 import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ const sectionOrder: Section[] = [
 export default function DashboardPage() {
   const router = useRouter();
   const { answers, completed, reset } = usePlanStore();
+  const { steps } = useSteps();
 
   const handleReset = async () => {
     if (!window.confirm("Clear all answers and start over? This cannot be undone.")) return;

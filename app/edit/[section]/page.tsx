@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { usePlanStore } from "@/store/plan-store";
-import { steps } from "@/config/steps";
+import { useSteps } from "@/hooks/use-steps";
 import { SECTION_META, type Section } from "@/types";
 import { StepRenderer } from "@/components/flow/step-renderer";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ export default function EditSectionPage({
   const { section } = use(params);
   const router = useRouter();
   const { answers, setAnswer } = usePlanStore();
+  const { steps } = useSteps();
 
   const sectionSteps = steps.filter(
     (s) => s.section === section && s.type !== "section-intro"

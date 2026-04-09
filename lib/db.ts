@@ -30,4 +30,26 @@ export async function initDb() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS steps (
+      id TEXT PRIMARY KEY,
+      section TEXT NOT NULL,
+      type TEXT NOT NULL,
+      question TEXT NOT NULL,
+      subtitle TEXT,
+      placeholder TEXT,
+      options JSONB,
+      min_val NUMERIC,
+      max_val NUMERIC,
+      step_size NUMERIC,
+      prefix TEXT,
+      suffix TEXT,
+      required BOOLEAN NOT NULL DEFAULT false,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      active BOOLEAN NOT NULL DEFAULT true,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
 }

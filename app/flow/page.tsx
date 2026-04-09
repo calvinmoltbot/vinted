@@ -3,30 +3,31 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { steps } from "@/config/steps";
+import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
 import { usePlanStore } from "@/store/plan-store";
 import { StepRenderer } from "@/components/flow/step-renderer";
 import { StepFeedback } from "@/components/flow/step-feedback";
 import { ProgressBar } from "@/components/flow/progress-bar";
 import { useKeyboardNav } from "@/hooks/use-keyboard-nav";
+import { useSteps } from "@/hooks/use-steps";
 import { SECTION_META } from "@/types";
 import { Button } from "@/components/ui/button";
 
 export default function FlowPage() {
   const router = useRouter();
+  const { steps, loading: stepsLoading } = useSteps();
   const { answers, currentStep, setAnswer, nextStep, prevStep, setCompleted } =
     usePlanStore();
 
   const step = steps[currentStep];
-  const value = answers[step.id];
+  const value = step ? answers[step.id] ?? "" : "";
   const isFirst = currentStep === 0;
   const isLast = currentStep === steps.length - 1;
-  const isIntro = step.type === "section-intro";
+  const isIntro = step?.type === "section-intro";
 
   const hasValue =
     isIntro ||
-    !step.required ||
+    !step?.required ||
     (Array.isArray(value) ? value.length > 0 : value !== undefined && value !== "" && value !== 0);
 
   const handleNext = useCallback(() => {
@@ -45,6 +46,14 @@ export default function FlowPage() {
 
   useKeyboardNav({ onNext: handleNext, onPrev: handlePrev });
 
+  if (stepsLoading || !step) {
+    return (
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
+      </div>
+    );
+  }
+
   const sectionMeta = SECTION_META[step.section];
   const inputStepIndex = steps
     .slice(0, currentStep + 1)
@@ -55,7 +64,7 @@ export default function FlowPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
-      <ProgressBar currentStep={currentStep} />
+      <ProgressBar currentStep={currentStep} totalSteps={steps.length} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-8 pb-4">
@@ -74,7 +83,7 @@ export default function FlowPage() {
             </span>
           )}
         </div>
-        <div className="w-9" /> {/* Spacer for alignment */}
+        <div className="w-9" />
       </div>
 
       {/* Content */}
@@ -89,7 +98,6 @@ export default function FlowPage() {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="space-y-8"
             >
-              {/* Question text (for input steps) */}
               {!isIntro && (
                 <div className="space-y-2">
                   <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
@@ -104,14 +112,12 @@ export default function FlowPage() {
                 </div>
               )}
 
-              {/* Input */}
               <StepRenderer
                 step={step}
                 value={value}
                 onChange={(val) => setAnswer(step.id, val)}
               />
 
-              {/* Feedback */}
               {!isIntro && <StepFeedback stepId={step.id} />}
             </motion.div>
           </AnimatePresence>

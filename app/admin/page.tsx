@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, MessageCircle, Trash2 } from "lucide-react";
-import { steps } from "@/config/steps";
+import { ArrowLeft, MessageCircle, ListChecks } from "lucide-react";
+import { steps as staticSteps } from "@/config/steps";
 import { APP_NAME } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { QuestionEditor } from "@/components/admin/question-editor";
 
 interface FeedbackItem {
   id: number;
@@ -30,26 +31,25 @@ const typeLabels: Record<string, string> = {
   suggestion: "Suggestion",
 };
 
+type Tab = "feedback" | "questions";
+
 export default function AdminPage() {
+  const [tab, setTab] = useState<Tab>("questions");
   const [feedback, setFeedback] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadFeedback = async () => {
-    try {
-      const res = await fetch("/api/feedback");
-      const data = await res.json();
-      setFeedback(data);
-    } catch {
-      // silent
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    loadFeedback();
+    (async () => {
+      try {
+        const res = await fetch("/api/feedback");
+        setFeedback(await res.json());
+      } catch {
+        // silent
+      }
+      setLoading(false);
+    })();
   }, []);
 
-  // Group by step
   const grouped = feedback.reduce(
     (acc, item) => {
       if (!acc[item.stepId]) acc[item.stepId] = [];
@@ -59,11 +59,9 @@ export default function AdminPage() {
     {} as Record<string, FeedbackItem[]>
   );
 
-  const stepsWithFeedback = Object.keys(grouped);
-  const totalFeedback = feedback.length;
-
   return (
     <div className="min-h-screen bg-stone-50">
+      {/* Header */}
       <div className="border-b border-zinc-100 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -71,19 +69,57 @@ export default function AdminPage() {
               <ArrowLeft className="w-5 h-5 text-zinc-400 hover:text-zinc-600 transition-colors" />
             </Link>
             <h1 className="text-xl font-semibold text-zinc-900">
-              {APP_NAME} — Feedback
+              {APP_NAME} — Admin
             </h1>
           </div>
-          <Badge variant="outline" className="text-zinc-500">
-            {totalFeedback} item{totalFeedback !== 1 ? "s" : ""}
-          </Badge>
+          {tab === "feedback" && (
+            <Badge variant="outline" className="text-zinc-500">
+              {feedback.length} item{feedback.length !== 1 ? "s" : ""}
+            </Badge>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="max-w-3xl mx-auto px-6 flex gap-1">
+          <button
+            onClick={() => setTab("questions")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors",
+              tab === "questions"
+                ? "border-rose-500 text-rose-600"
+                : "border-transparent text-zinc-400 hover:text-zinc-600"
+            )}
+          >
+            <ListChecks className="w-4 h-4" />
+            Questions
+          </button>
+          <button
+            onClick={() => setTab("feedback")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors",
+              tab === "feedback"
+                ? "border-rose-500 text-rose-600"
+                : "border-transparent text-zinc-400 hover:text-zinc-600"
+            )}
+          >
+            <MessageCircle className="w-4 h-4" />
+            Feedback
+            {feedback.length > 0 && (
+              <span className="bg-rose-100 text-rose-600 text-xs px-1.5 py-0.5 rounded-full">
+                {feedback.length}
+              </span>
+            )}
+          </button>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-10">
-        {loading ? (
+      {/* Content */}
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        {tab === "questions" ? (
+          <QuestionEditor />
+        ) : loading ? (
           <p className="text-zinc-400">Loading feedback...</p>
-        ) : totalFeedback === 0 ? (
+        ) : feedback.length === 0 ? (
           <div className="text-center py-20 space-y-3">
             <MessageCircle className="w-12 h-12 text-zinc-300 mx-auto" />
             <p className="text-zinc-500 text-lg">No feedback yet</p>
@@ -93,8 +129,8 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="space-y-8">
-            {stepsWithFeedback.map((stepId) => {
-              const step = steps.find((s) => s.id === stepId);
+            {Object.keys(grouped).map((stepId) => {
+              const step = staticSteps.find((s) => s.id === stepId);
               const items = grouped[stepId];
 
               return (

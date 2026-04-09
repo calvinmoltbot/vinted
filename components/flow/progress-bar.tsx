@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { steps } from "@/config/steps";
 
 interface ProgressBarProps {
   currentStep: number;
+  totalSteps: number;
 }
 
-export function ProgressBar({ currentStep }: ProgressBarProps) {
-  const progress = ((currentStep + 1) / steps.length) * 100;
+export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
+  const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 h-1.5 bg-zinc-100">
