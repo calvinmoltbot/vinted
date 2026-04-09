@@ -4,9 +4,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle } from "lucide-react";
+import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle, CloudUpload } from "lucide-react";
 import { usePlanStore } from "@/store/plan-store";
 import { useSteps } from "@/hooks/use-steps";
+import { useAutoSave } from "@/hooks/use-auto-save";
 import { SECTION_META, type Section } from "@/types";
 import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -20,8 +21,23 @@ const sectionOrder: Section[] = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { answers, completed, reset } = usePlanStore();
+  const { answers, completed, reset, currentStep } = usePlanStore();
   const { steps } = useSteps();
+
+  useAutoSave();
+
+  const handleSync = async () => {
+    try {
+      await fetch("/api/plan", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers, currentStep }),
+      });
+      alert("Synced to database!");
+    } catch {
+      alert("Sync failed — try again.");
+    }
+  };
 
   const handleReset = async () => {
     if (!window.confirm("Clear all answers and start over? This cannot be undone.")) return;
@@ -86,6 +102,15 @@ export default function DashboardPage() {
             <h1 className="text-xl font-semibold text-zinc-900">{APP_NAME}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSync}
+              className="gap-2"
+            >
+              <CloudUpload className="w-4 h-4" />
+              Sync
+            </Button>
             <Link href="/admin">
               <Button variant="outline" size="sm" className="gap-2">
                 <MessageCircle className="w-4 h-4" />

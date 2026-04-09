@@ -9,6 +9,7 @@ import { StepRenderer } from "@/components/flow/step-renderer";
 import { StepFeedback } from "@/components/flow/step-feedback";
 import { ProgressBar } from "@/components/flow/progress-bar";
 import { useKeyboardNav } from "@/hooks/use-keyboard-nav";
+import { useAutoSave } from "@/hooks/use-auto-save";
 import { useSteps } from "@/hooks/use-steps";
 import { SECTION_META } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,8 @@ export default function FlowPage() {
   const { steps, loading: stepsLoading } = useSteps();
   const { answers, currentStep, setAnswer, nextStep, prevStep, setCompleted } =
     usePlanStore();
+
+  useAutoSave();
 
   const step = steps[currentStep];
   const value = step ? answers[step.id] ?? "" : "";
