@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle, CloudUpload } from "lucide-react";
+import { ArrowLeft, Edit3, Download, RotateCcw, MessageCircle, CloudUpload, BarChart3 } from "lucide-react";
 import { usePlanStore } from "@/store/plan-store";
 import { useSteps } from "@/hooks/use-steps";
 import { useAutoSave } from "@/hooks/use-auto-save";
@@ -103,6 +103,12 @@ export default function DashboardPage() {
             <h1 className="text-xl font-semibold text-zinc-900">{APP_NAME}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Link href="/plan">
+              <Button size="sm" className="bg-rose-500 hover:bg-rose-600 text-white gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Business Plan
+              </Button>
+            </Link>
             <Button
               variant="outline"
               size="sm"
