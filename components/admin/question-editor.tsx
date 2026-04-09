@@ -167,11 +167,24 @@ export function QuestionEditor() {
     setSaving(false);
   };
 
+  const reseed = async () => {
+    if (!window.confirm("Re-seed from config? This will overwrite any edits to existing questions (new questions you added will be kept).")) return;
+    setSaving(true);
+    try {
+      await fetch("/api/steps", { method: "PUT" });
+      await loadSteps();
+    } catch {
+      // silent
+    }
+    setSaving(false);
+  };
+
   const sectionColor: Record<string, string> = {
     "core-business": "bg-rose-100 text-rose-700",
     "goals-financials": "bg-amber-100 text-amber-700",
     operations: "bg-sky-100 text-sky-700",
     "growth-brand": "bg-violet-100 text-violet-700",
+    "app-wishlist": "bg-emerald-100 text-emerald-700",
   };
 
   const typeColor: Record<string, string> = {
@@ -206,6 +219,21 @@ export function QuestionEditor() {
 
   return (
     <div className="space-y-4">
+      {/* Re-seed button */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-zinc-500">{steps.length} questions</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={reseed}
+          disabled={saving}
+          className="gap-2 text-zinc-500"
+        >
+          <Database className="w-3.5 h-3.5" />
+          {saving ? "Seeding..." : "Re-seed from config"}
+        </Button>
+      </div>
+
       {/* Question list */}
       {steps.map((step, index) => (
         <div
