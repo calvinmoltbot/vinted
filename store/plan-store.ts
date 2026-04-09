@@ -10,6 +10,7 @@ interface PlanStore {
   answers: PlanAnswers;
   currentStep: number;
   completed: boolean;
+  _hydrated: boolean;
 
   setAnswer: (stepId: string, value: AnswerValue) => void;
   nextStep: () => void;
@@ -25,6 +26,7 @@ export const usePlanStore = create<PlanStore>()(
       answers: {},
       currentStep: 0,
       completed: false,
+      _hydrated: false,
 
       setAnswer: (stepId, value) =>
         set((state) => ({
@@ -50,6 +52,9 @@ export const usePlanStore = create<PlanStore>()(
     }),
     {
       name: PLAN_STORAGE_KEY,
+      onRehydrateStorage: () => (state) => {
+        if (state) state._hydrated = true;
+      },
     }
   )
 );

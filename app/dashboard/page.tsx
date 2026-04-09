@@ -21,7 +21,7 @@ const sectionOrder: Section[] = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { answers, completed, reset, currentStep } = usePlanStore();
+  const { answers, completed, reset, currentStep, _hydrated } = usePlanStore();
   const { steps } = useSteps();
 
   useAutoSave();
@@ -51,10 +51,11 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    if (!_hydrated) return; // Wait for localStorage to load
     if (!completed && Object.keys(answers).length === 0) {
       router.push("/");
     }
-  }, [completed, answers, router]);
+  }, [completed, answers, router, _hydrated]);
 
   const getStepsForSection = (section: Section) =>
     steps.filter((s) => s.section === section && s.type !== "section-intro");
